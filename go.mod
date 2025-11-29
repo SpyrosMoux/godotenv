@@ -1,3 +1,3 @@
-module github.com/joho/godotenv
+module github.com/SpyrosMoux/godotenv
 
 go 1.12
