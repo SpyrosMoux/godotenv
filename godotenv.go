@@ -18,6 +18,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"os/exec"
 	"sort"
@@ -192,6 +193,14 @@ func GetOrDefault(key, defaultVal string) string {
 	if val == "" {
 		_ = os.Setenv(key, defaultVal)
 		return defaultVal
+	}
+	return val
+}
+
+func GetOrExit(key string) string {
+	val, exists := os.LookupEnv(key)
+	if !exists {
+		log.Fatal(key + " env variable not found")
 	}
 	return val
 }
