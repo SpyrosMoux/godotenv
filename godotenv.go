@@ -15,6 +15,7 @@ package godotenv
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -172,6 +173,27 @@ func Marshal(envMap map[string]string) (string, error) {
 	}
 	sort.Strings(lines)
 	return strings.Join(lines, "\n"), nil
+}
+
+func Get(key string) string {
+	return os.Getenv(key)
+}
+
+func GetOrError(key string) (string, error) {
+	val, exists := os.LookupEnv(key)
+	if !exists {
+		return "", errors.New(key + " env variable not found")
+	}
+	return val, nil
+}
+
+func GetOrDefault(key, defaultVal string) string {
+	val := Get(key)
+	if val == "" {
+		_ = os.Setenv(key, defaultVal)
+		return defaultVal
+	}
+	return val
 }
 
 func filenamesOrDefault(filenames []string) []string {
